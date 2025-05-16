@@ -89,21 +89,9 @@ export function MultiSelectDropdown() {
     )
   }
 
-  // Custom checkbox component
-  const CustomCheckbox = ({ checked }: { checked: boolean }) => (
-    <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
-      <div className={`w-4 h-4 rounded border ${checked ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-      {checked && (
-        <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      )}
-    </div>
-  )
-
   return (
     <div className="relative">
-      <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
             variant="outline" 
@@ -123,7 +111,6 @@ export function MultiSelectDropdown() {
           className="w-[200px] p-2 shadow-md border border-gray-200 rounded-md bg-white max-h-[300px] overflow-auto" 
           align="start"
           sideOffset={5}
-          onCloseAutoFocus={(e) => e.preventDefault()} // Prevent focus on close
         >
           {/* All option */}
           <DropdownMenuItem 
