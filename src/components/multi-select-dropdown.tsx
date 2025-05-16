@@ -1,11 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // Define platform items with custom icons to match the reference design
@@ -106,12 +105,15 @@ export function MultiSelectDropdown() {
                   className="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 rounded"
                   onClick={() => toggleAll()}
                 >
-                  <Checkbox 
-                    className="mr-2 h-4 w-4 rounded-sm border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                    checked={selectedItems.length === items.length}
-                    id="select-all"
-                  />
-                  <label htmlFor="select-all" className="cursor-pointer flex-1">All</label>
+                  <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
+                    <div className={`w-4 h-4 rounded border ${selectedItems.length === items.length ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
+                    {selectedItems.length === items.length && (
+                      <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="cursor-pointer flex-1">All</span>
                 </div>
                 {items.map((item) => (
                   <div 
@@ -119,13 +121,16 @@ export function MultiSelectDropdown() {
                     className="flex items-center w-full px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 rounded"
                     onClick={() => toggleItem(item.value)}
                   >
-                    <Checkbox 
-                      className="mr-2 h-4 w-4 rounded-sm border-gray-300 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
-                      checked={selectedItems.includes(item.value)}
-                      id={`select-${item.value}`}
-                    />
+                    <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
+                      <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
+                      {selectedItems.includes(item.value) && (
+                        <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </div>
                     <span className="mr-2 flex items-center">{item.icon}</span>
-                    <label htmlFor={`select-${item.value}`} className="cursor-pointer flex-1">{item.label}</label>
+                    <span className="cursor-pointer flex-1">{item.label}</span>
                   </div>
                 ))}
               </div>
