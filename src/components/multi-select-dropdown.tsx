@@ -55,58 +55,59 @@ export function MultiSelectDropdown() {
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button 
-          variant="outline" 
-          role="combobox" 
-          aria-expanded={open} 
-          className="w-[200px] justify-between text-sm font-normal"
+    <div className="relative">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button 
+            variant="outline" 
+            role="combobox" 
+            aria-expanded={open} 
+            className="w-[200px] justify-between text-sm font-normal h-8 px-3 py-1"
+            onClick={() => setOpen(!open)}
+          >
+            {renderSelectedItems()}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent 
+          className="w-[200px] p-0 shadow-md border border-gray-200 rounded-md" 
+          align="start"
+          sideOffset={5}
         >
-          {renderSelectedItems()}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandList>
-            <CommandEmpty>No platforms found.</CommandEmpty>
-          </CommandList>
-          <CommandList>
-            <CommandGroup>
-              <CommandItem onSelect={() => toggleAll()} className="justify-start text-sm">
-                <div className="flex items-center">
-                  <div className="mr-2 h-4 w-4 flex items-center justify-center">
-                    <Check
-                      className={cn(
-                        "h-3 w-3",
-                        selectedItems && selectedItems.length === items.length ? "opacity-100" : "opacity-0",
-                      )}
-                    />
+          <div className="rounded-md overflow-hidden">
+            <div className="max-h-[300px] overflow-auto">
+              <div className="p-1">
+                <div 
+                  className="flex items-center w-full px-2 py-1.5 text-sm cursor-pointer hover:bg-gray-100 rounded"
+                  onClick={() => toggleAll()}
+                >
+                  <div className="mr-2 h-4 w-4 flex items-center justify-center border border-gray-300 rounded-sm">
+                    {selectedItems.length === items.length && (
+                      <Check className="h-3 w-3" />
+                    )}
                   </div>
                   <span>All</span>
                 </div>
-              </CommandItem>
-              {items.map((item) => (
-                <CommandItem key={item.value} onSelect={() => toggleItem(item.value)} className="justify-start text-sm">
-                  <div className="flex items-center">
-                    <div className="mr-2 h-4 w-4 flex items-center justify-center">
-                      <Check
-                        className={cn(
-                          "h-3 w-3",
-                          selectedItems && selectedItems.includes(item.value) ? "opacity-100" : "opacity-0",
-                        )}
-                      />
+                {items.map((item) => (
+                  <div 
+                    key={item.value} 
+                    className="flex items-center w-full px-2 py-1.5 text-sm cursor-pointer hover:bg-gray-100 rounded"
+                    onClick={() => toggleItem(item.value)}
+                  >
+                    <div className="mr-2 h-4 w-4 flex items-center justify-center border border-gray-300 rounded-sm">
+                      {selectedItems.includes(item.value) && (
+                        <Check className="h-3 w-3" />
+                      )}
                     </div>
                     <span className="mr-2">{item.icon}</span>
                     <span>{item.label}</span>
                   </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                ))}
+              </div>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
