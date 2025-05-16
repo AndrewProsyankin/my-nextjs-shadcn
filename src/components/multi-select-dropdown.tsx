@@ -13,37 +13,34 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 
-// Define platform items with custom icons to match the reference design
-const items = [
-  { value: "mt4", label: "Meta Trader 4", icon: (
-    <div className="w-5 h-5 flex items-center justify-center">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="6" fill="#1E88E5" stroke="#1E88E5" strokeWidth="0.5"/>
-        <path d="M4.5 8L7 10.5L11.5 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </div>
-  ) },
-  { value: "mt5", label: "Meta Trader 5", icon: (
-    <div className="w-5 h-5 flex items-center justify-center">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="6" fill="#FFC107" stroke="#FFC107" strokeWidth="0.5"/>
-        <path d="M4.5 8L7 10.5L11.5 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </div>
-  ) },
-  { value: "rst", label: "R Stock Trader", icon: (
-    <div className="w-5 h-5 flex items-center justify-center">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2H14V14H2V2Z" fill="#1E88E5" stroke="#1E88E5" strokeWidth="0.5"/>
-        <path d="M4.5 8L7 10.5L11.5 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </div>
-  ) }
-];
+export interface MultiSelectItem {
+  value: string;
+  label: string;
+  icon?: React.ReactNode;
+}
 
-export function MultiSelectDropdown() {
-  const [open, setOpen] = React.useState(false)
-  const [selectedItems, setSelectedItems] = React.useState<string[]>(["mt4", "mt5", "rst"]) // Default selected items
+export interface MultiSelectDropdownProps {
+  items: MultiSelectItem[];
+  defaultSelected?: string[];
+  placeholder?: string;
+  buttonClassName?: string;
+  width?: string;
+  onChange?: (selectedValues: string[]) => void;
+  label?: string;
+}
+
+
+
+export function MultiSelectDropdown({
+  items = [],
+  defaultSelected = [],
+  placeholder = "Select items...",
+  buttonClassName,
+  width = "200px",
+  onChange,
+  label = "Platforms"
+}: MultiSelectDropdownProps) {
+  const [selectedItems, setSelectedItems] = React.useState<string[]>(defaultSelected)
 
   const toggleItem = (item: string, event?: React.MouseEvent) => {
     if (!item) return
@@ -55,8 +52,16 @@ export function MultiSelectDropdown() {
     setSelectedItems((current) => {
       // Ensure current is an array
       const currentArray = Array.isArray(current) ? current : []
-
-      return currentArray.includes(item) ? currentArray.filter((i) => i !== item) : [...currentArray, item]
+      const newItems = currentArray.includes(item) 
+        ? currentArray.filter((i) => i !== item) 
+        : [...currentArray, item]
+      
+      // Вызываем callback, если он предоставлен
+      if (onChange) {
+        onChange(newItems)
+      }
+      
+      return newItems
     })
   }
 
@@ -69,35 +74,46 @@ export function MultiSelectDropdown() {
     setSelectedItems((current) => {
       // Ensure current is an array
       const currentArray = Array.isArray(current) ? current : []
-
-      return currentArray.length === items.length ? [] : items.map((item) => item.value)
+      const newItems = currentArray.length === items.length 
+        ? [] 
+        : items.map((item) => item.value)
+      
+      // Вызываем callback, если он предоставлен
+      if (onChange) {
+        onChange(newItems)
+      }
+      
+      return newItems
     })
   }
 
   // Function to render selected items with icons
   const renderSelectedItems = () => {
-    if (!selectedItems || selectedItems.length === 0) return "Select platforms..."
+    if (!selectedItems || selectedItems.length === 0) return placeholder
     
     return (
       <div className="flex items-center gap-1">
-        <span className="mr-1 text-gray-700">Platforms</span>
+        <span className="mr-1 text-gray-700">{label}</span>
         {selectedItems.map((value) => {
           const item = items.find((i) => i.value === value)
-          return item ? <span key={value} className="flex items-center">{item.icon}</span> : null
+          return item?.icon ? <span key={value} className="flex items-center">{item.icon}</span> : null
         })}
       </div>
     )
   }
 
+  // Используем состояние для отслеживания открытия/закрытия меню
+  const [open, setOpen] = React.useState(false)
+  
   return (
     <div className="relative">
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button 
             variant="outline" 
             role="combobox" 
             aria-expanded={open} 
-            className="w-[200px] justify-between text-sm font-normal h-9 px-3 py-2 bg-white border-gray-300 hover:bg-gray-50"
+            className={cn(`justify-between text-sm font-normal h-9 px-3 py-2 bg-white border-gray-300 hover:bg-gray-50`, `w-[${width}]`, buttonClassName)}
           >
             {renderSelectedItems()}
             {open ? (
