@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,14 +42,10 @@ export function defaultRenderSelectedItems({ selectedItems, placeholder }: Rende
 export function defaultRenderMenuItem({ item, selectedItems }: { item: BaseSelectItem, selectedItems: string[] }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="relative w-4 h-4 flex items-center justify-center">
-        <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-        {selectedItems.includes(item.value) && (
-          <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        )}
-            </div>
+      <Checkbox 
+        checked={selectedItems.includes(item.value)}
+        className="mr-2"
+      />
       <span>{item.label}</span>
     </div>
   );
@@ -167,14 +164,10 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
               toggleAll();
             }}
           >
-            <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
-              <div className={`w-4 h-4 rounded border ${selectedItems.length === items.length ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-              {selectedItems.length === items.length && (
-                <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-            </div>
+            <Checkbox 
+              checked={selectedItems.length === items.length}
+              className="mr-2"
+            />
             <span className="flex-1">All</span>
           </DropdownMenuItem>
           
