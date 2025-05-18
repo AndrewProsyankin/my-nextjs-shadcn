@@ -44,7 +44,6 @@ export function defaultRenderMenuItem({ item, selectedItems }: { item: BaseSelec
     <div className="flex items-center gap-2">
       <Checkbox 
         checked={selectedItems.includes(item.value)}
-        className="mr-2"
       />
       <span>{item.label}</span>
     </div>
@@ -123,12 +122,8 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
   }
 
   // Используем кастомный рендеринг выбранных элементов или стандартный
-  const renderSelectedItemsContent = () => {
-    if (customRenderSelectedItems) {
-      return customRenderSelectedItems({ selectedItems, items, placeholder, label });
-    }
-    return defaultRenderSelectedItems({ selectedItems, items, placeholder, label });
-  }
+  const renderSelectedItems = customRenderSelectedItems || defaultRenderSelectedItems;
+  const renderMenuItem = customRenderMenuItem || defaultRenderMenuItem;
 
   // Используем состояние для отслеживания открытия/закрытия меню
   const [open, setOpen] = React.useState(false)
@@ -143,7 +138,7 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
             aria-expanded={open} 
             className={cn(`justify-between text-sm font-normal h-9 px-3 py-2 bg-white border-gray-300 hover:bg-gray-50`, `w-[${width}]`, buttonClassName)}
           >
-            {renderSelectedItemsContent()}
+            {renderSelectedItems({ selectedItems, items, placeholder, label })}
             {open ? (
               <ChevronUp className="ml-2 h-4 w-4 shrink-0 text-gray-500" />
             ) : (
@@ -183,7 +178,7 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
                 toggleItem(item.value);
               }}
             >
-              {customRenderMenuItem ? customRenderMenuItem({ item, selectedItems }) : defaultRenderMenuItem({ item, selectedItems })}
+              {renderMenuItem({ item, selectedItems })}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
