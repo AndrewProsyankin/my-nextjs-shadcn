@@ -41,7 +41,7 @@ export default function Home() {
                   <span className="mr-1 text-gray-700">{label}</span>
                   {selectedItems.map((value) => {
                     const item = items.find((i) => i.value === value);
-                    return item?.icon ? <span key={value} className="flex items-center">{item.icon}</span> : null;
+                    return item ? <span key={value} className="flex items-center">{item.icon}</span> : null;
                   })}
                 </div>
               );
@@ -97,7 +97,7 @@ export default function Home() {
                   </svg>
                 )}
               </div>
-              {/* <span className="mr-2 flex items-center">{item.icon}</span> */}
+              <span className="mr-2 flex items-center">{item.icon}</span>
               <span className="flex-1">{item.label}</span>
               </>
             )}

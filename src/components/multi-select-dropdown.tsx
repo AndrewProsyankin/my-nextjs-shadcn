@@ -13,21 +13,22 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 
-export interface MultiSelectItem {
+// Базовый интерфейс для элементов с обязательными полями value и label
+export interface BaseSelectItem {
   value: string;
   label: string;
 }
 
-// Интерфейс для пропсов функции renderSelectedItems
-export interface RenderSelectedItemsProps {
+// Интерфейс для пропсов функции renderSelectedItems с обобщенным типом T
+export interface RenderSelectedItemsProps<T extends BaseSelectItem> {
   selectedItems: string[];
-  items: MultiSelectItem[];
+  items: T[];
   placeholder: string;
   label: string;
 }
 
 // Функция для рендеринга выбранных элементов с иконками
-export function defaultRenderSelectedItems({ selectedItems, placeholder }: RenderSelectedItemsProps) {
+export function defaultRenderSelectedItems({ selectedItems, placeholder }: RenderSelectedItemsProps<BaseSelectItem>) {
   if (!selectedItems || selectedItems.length === 0) return placeholder;
   
   return (
@@ -37,37 +38,36 @@ export function defaultRenderSelectedItems({ selectedItems, placeholder }: Rende
   );
 }
 
-export function defaultRenderMenuItem({ item, selectedItems }: { item: MultiSelectItem, selectedItems: string[] }) {
+export function defaultRenderMenuItem({ item, selectedItems }: { item: BaseSelectItem, selectedItems: string[] }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
-              <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-              {selectedItems.includes(item.value) && (
-                <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
+      <div className="relative w-4 h-4 flex items-center justify-center">
+        <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
+        {selectedItems.includes(item.value) && (
+          <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        )}
             </div>
       <span>{item.label}</span>
     </div>
   );
 }
 
-export interface MultiSelectDropdownProps {
-  items: MultiSelectItem[];
+export interface MultiSelectDropdownProps<T extends BaseSelectItem> {
+  items: T[];
   defaultSelected?: string[];
   placeholder?: string;
   buttonClassName?: string;
   width?: string;
   onChange?: (selectedValues: string[]) => void;
   label?: string;
-  customRenderSelectedItems?: (props: RenderSelectedItemsProps) => React.ReactNode;
-  customRenderMenuItem?: (props: { item: MultiSelectItem, selectedItems: string[] }) => React.ReactNode;
+  customRenderSelectedItems?: (props: RenderSelectedItemsProps<T>) => React.ReactNode;
+  customRenderMenuItem?: (props: { item: T, selectedItems: string[] }) => React.ReactNode;
 }
 
 
-
-export function MultiSelectDropdown({
+export function MultiSelectDropdown<T extends BaseSelectItem>({
   items = [],
   defaultSelected = [],
   placeholder = "Select items...",
@@ -77,7 +77,7 @@ export function MultiSelectDropdown({
   label = "Platforms",
   customRenderSelectedItems,
   customRenderMenuItem
-}: MultiSelectDropdownProps) {
+}: MultiSelectDropdownProps<T>) {
   const [selectedItems, setSelectedItems] = React.useState<string[]>(defaultSelected)
 
   const toggleItem = (item: string, event?: React.MouseEvent) => {
