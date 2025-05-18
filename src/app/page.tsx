@@ -62,7 +62,7 @@ export default function Home() {
               if (!selectedItems || selectedItems.length === 0) return placeholder;
               
               return (
-                <div className="flex items-center gap-1">
+                <div className="flex flex-wrap items-center gap-1">
                   {selectedItems.map(itemValue => {
                     const item = items.find(i => i.value === itemValue);
                     return (

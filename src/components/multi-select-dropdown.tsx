@@ -138,14 +138,18 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
             variant="outline" 
             role="combobox" 
             aria-expanded={open} 
-            className={cn(`justify-between text-sm font-normal h-9 px-3 py-2 bg-white border-gray-300 hover:bg-gray-50`, `w-[${width}]`, buttonClassName)}
+            className={cn(`text-sm font-normal min-h-9 h-auto px-3 py-2 bg-white border-gray-300 hover:bg-gray-50`, `w-[${width}]`, buttonClassName)}
           >
-            {renderSelectedItems({ selectedItems, items, placeholder, label })}
-            {open ? (
-              <ChevronUp className="ml-2 h-4 w-4 shrink-0 text-gray-500" />
-            ) : (
-              <ChevronDown className="ml-2 h-4 w-4 shrink-0 text-gray-500" />
-            )}
+            <div className="flex-1 flex flex-wrap items-center gap-1 pr-2">
+              {renderSelectedItems({ selectedItems, items, placeholder, label })}
+            </div>
+            <div className="flex-shrink-0">
+              {open ? (
+                <ChevronUp className="h-4 w-4 text-gray-500" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              )}
+            </div>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
