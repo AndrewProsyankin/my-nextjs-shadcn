@@ -41,10 +41,12 @@ export function defaultRenderSelectedItems({ selectedItems, placeholder }: Rende
 
 export function defaultRenderMenuItem({ item, selectedItems }: { item: BaseSelectItem, selectedItems: string[] }) {
   return (
-    <div className="flex items-center gap-2">
-      <Checkbox 
-        checked={selectedItems.includes(item.value)}
-      />
+    <div className="flex items-center gap-3">
+      <div className="w-6 h-6 flex items-center justify-center">
+        <Checkbox 
+          checked={selectedItems.includes(item.value)}
+        />
+      </div>
       <span>{item.label}</span>
     </div>
   );
@@ -159,10 +161,11 @@ export function MultiSelectDropdown<T extends BaseSelectItem>({
               toggleAll();
             }}
           >
-            <Checkbox 
-              checked={selectedItems.length === items.length}
-              className="mr-2"
-            />
+            <div className="w-6 h-6 flex items-center justify-center mr-2">
+              <Checkbox 
+                checked={selectedItems.length === items.length}
+              />
+            </div>
             <span className="flex-1">All</span>
           </DropdownMenuItem>
           
