@@ -3,6 +3,7 @@
 import { MultiSelectDropdown } from "@/components/multi-select-dropdown";
 import { TRADING_PLATFORMS } from "@/data/trading-platforms";
 import { X } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Home() {
   // Обработчик изменения выбранных элементов
@@ -76,13 +77,10 @@ export default function Home() {
             }}
             customRenderMenuItem={({ item, selectedItems }) => (
               <>
-              <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
-                <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-                {selectedItems.includes(item.value) && (
-                  <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                )}
+              <div className="w-6 h-6 flex items-center justify-center mr-2">
+                <Checkbox 
+                  checked={selectedItems.includes(item.value)}
+                />
               </div>
               <span className="mr-2 flex items-center">{item.icon}</span>
               <span className="flex-1">{item.label}</span>
