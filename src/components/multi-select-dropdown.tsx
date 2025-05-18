@@ -16,7 +16,41 @@ import {
 export interface MultiSelectItem {
   value: string;
   label: string;
-  icon?: React.ReactNode;
+}
+
+// Интерфейс для пропсов функции renderSelectedItems
+export interface RenderSelectedItemsProps {
+  selectedItems: string[];
+  items: MultiSelectItem[];
+  placeholder: string;
+  label: string;
+}
+
+// Функция для рендеринга выбранных элементов с иконками
+export function defaultRenderSelectedItems({ selectedItems, placeholder }: RenderSelectedItemsProps) {
+  if (!selectedItems || selectedItems.length === 0) return placeholder;
+  
+  return (
+    <div className="flex items-center gap-1">
+      {selectedItems.join(", ")}
+    </div>
+  );
+}
+
+export function defaultRenderMenuItem({ item, selectedItems }: { item: MultiSelectItem, selectedItems: string[] }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
+              <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
+              {selectedItems.includes(item.value) && (
+                <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </div>
+      <span>{item.label}</span>
+    </div>
+  );
 }
 
 export interface MultiSelectDropdownProps {
@@ -27,6 +61,8 @@ export interface MultiSelectDropdownProps {
   width?: string;
   onChange?: (selectedValues: string[]) => void;
   label?: string;
+  customRenderSelectedItems?: (props: RenderSelectedItemsProps) => React.ReactNode;
+  customRenderMenuItem?: (props: { item: MultiSelectItem, selectedItems: string[] }) => React.ReactNode;
 }
 
 
@@ -38,7 +74,9 @@ export function MultiSelectDropdown({
   buttonClassName,
   width = "200px",
   onChange,
-  label = "Platforms"
+  label = "Platforms",
+  customRenderSelectedItems,
+  customRenderMenuItem
 }: MultiSelectDropdownProps) {
   const [selectedItems, setSelectedItems] = React.useState<string[]>(defaultSelected)
 
@@ -87,19 +125,12 @@ export function MultiSelectDropdown({
     })
   }
 
-  // Function to render selected items with icons
-  const renderSelectedItems = () => {
-    if (!selectedItems || selectedItems.length === 0) return placeholder
-    
-    return (
-      <div className="flex items-center gap-1">
-        <span className="mr-1 text-gray-700">{label}</span>
-        {selectedItems.map((value) => {
-          const item = items.find((i) => i.value === value)
-          return item?.icon ? <span key={value} className="flex items-center">{item.icon}</span> : null
-        })}
-      </div>
-    )
+  // Используем кастомный рендеринг выбранных элементов или стандартный
+  const renderSelectedItemsContent = () => {
+    if (customRenderSelectedItems) {
+      return customRenderSelectedItems({ selectedItems, items, placeholder, label });
+    }
+    return defaultRenderSelectedItems({ selectedItems, items, placeholder, label });
   }
 
   // Используем состояние для отслеживания открытия/закрытия меню
@@ -115,7 +146,7 @@ export function MultiSelectDropdown({
             aria-expanded={open} 
             className={cn(`justify-between text-sm font-normal h-9 px-3 py-2 bg-white border-gray-300 hover:bg-gray-50`, `w-[${width}]`, buttonClassName)}
           >
-            {renderSelectedItems()}
+            {renderSelectedItemsContent()}
             {open ? (
               <ChevronUp className="ml-2 h-4 w-4 shrink-0 text-gray-500" />
             ) : (
@@ -159,16 +190,7 @@ export function MultiSelectDropdown({
                 toggleItem(item.value);
               }}
             >
-              <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
-                <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
-                {selectedItems.includes(item.value) && (
-                  <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                )}
-              </div>
-              <span className="mr-2 flex items-center">{item.icon}</span>
-              <span className="flex-1">{item.label}</span>
+              {customRenderMenuItem ? customRenderMenuItem({ item, selectedItems }) : defaultRenderMenuItem({ item, selectedItems })}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

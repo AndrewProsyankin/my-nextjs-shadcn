@@ -1,9 +1,8 @@
 "use client";
 
-import { MultiSelectDropdown, MultiSelectItem } from "@/components/multi-select-dropdown";
+import { MultiSelectDropdown } from "@/components/multi-select-dropdown";
 import { TRADING_PLATFORMS } from "@/data/trading-platforms";
-import { Button } from "@/components/ui/button";
-import { Check, ChevronDown, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function Home() {
   // Обработчик изменения выбранных элементов
@@ -26,6 +25,29 @@ export default function Home() {
             onChange={handleChange}
           />
         </div>
+
+        {/* Стандартный вариант */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-2">Стандартный вариант</h2>
+          <MultiSelectDropdown 
+            items={TRADING_PLATFORMS}
+            defaultSelected={["mt4", "mt5", "rst"]}
+            onChange={handleChange}
+            customRenderSelectedItems={({ selectedItems, items, placeholder, label }) => {
+              if (!selectedItems || selectedItems.length === 0) return placeholder;
+              
+              return (
+                <div className="flex items-center gap-1">
+                  <span className="mr-1 text-gray-700">{label}</span>
+                  {selectedItems.map((value) => {
+                    const item = items.find((i) => i.value === value);
+                    return item?.icon ? <span key={value} className="flex items-center">{item.icon}</span> : null;
+                  })}
+                </div>
+              );
+            }}
+          />
+        </div>
         
         {/* Вариант с кастомным рендерингом используя render props */}
         <div className="mb-8">
@@ -36,59 +58,48 @@ export default function Home() {
             onChange={handleChange}
             width="100%"
             label="Платформы"
-            // renderTrigger={({ selectedItems, items, isOpen }) => (
-            //   <div className="flex items-center justify-between w-full p-2 border rounded-md bg-white hover:bg-gray-50 cursor-pointer">
-            //     <div className="flex items-center gap-2">
-            //       <span className="font-medium">Платформы:</span>
-            //       <span className="text-sm text-muted-foreground">
-            //         {selectedItems.length > 0 
-            //           ? `Выбрано ${selectedItems.length}` 
-            //           : "Выберите платформы"}
-            //       </span>
-            //     </div>
-            //     <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-            //   </div>
-            // )}
-            renderSelectedItems={({ selectedItems, getItemLabel, removeItem }) => (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {selectedItems.map(value => (
-                  <div 
-                    key={value}
-                    className="flex items-center gap-1 bg-blue-100 text-blue-800 rounded-full px-2 py-1 text-xs"
-                  >
-                    <span>{getItemLabel(value)}</span>
-                    <X 
-                      className="h-3 w-3 cursor-pointer hover:text-blue-600" 
-                      onClick={() => removeItem(value)}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-            renderItem={({ item, isSelected, onSelect }) => (
-              <div 
-                className={`flex items-center gap-2 p-2 rounded ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'} cursor-pointer`}
-                onClick={onSelect}
-              >
-                <div className={`w-4 h-4 flex items-center justify-center rounded ${isSelected ? 'bg-blue-500' : 'border border-gray-300'}`}>
-                  {isSelected && <Check className="h-3 w-3 text-white" />}
+            customRenderSelectedItems={({ selectedItems, items, placeholder, label }) => {
+              // Создаем функции для работы с выбранными элементами
+              const getItemLabel = (value: string): string => {
+                const item = items.find(item => item.value === value);
+                return item?.label || value;
+              };
+              
+              const removeItem = (value: string): void => {
+                const newSelected = selectedItems.filter(v => v !== value);
+                handleChange(newSelected);
+              };
+              
+              return (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {selectedItems.map(value => (
+                    <div 
+                      key={value}
+                      className="flex items-center gap-1 bg-blue-100 text-blue-800 rounded-full px-2 py-1 text-xs"
+                    >
+                      <span>{getItemLabel(value)}</span>
+                      <X 
+                        className="h-3 w-3 cursor-pointer hover:text-blue-600" 
+                        onClick={() => removeItem(value)}
+                      />
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center gap-2">
-                  {item.icon}
-                  <span>{item.label}</span>
-                </div>
+              );
+            }}
+            customRenderMenuItem={({ item, selectedItems }) => (
+              <>
+              <div className="relative mr-2 w-4 h-4 flex items-center justify-center">
+                <div className={`w-4 h-4 rounded border ${selectedItems.includes(item.value) ? 'bg-[#2196F3] border-[#2196F3]' : 'border-gray-300'}`}></div>
+                {selectedItems.includes(item.value) && (
+                  <svg className="h-3 w-3 absolute text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
               </div>
-            )}
-            renderAllOption={({ isSelected, onSelect }) => (
-              <div 
-                className={`flex items-center gap-2 p-2 rounded ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'} cursor-pointer font-medium`}
-                onClick={onSelect}
-              >
-                <div className={`w-4 h-4 flex items-center justify-center rounded ${isSelected ? 'bg-blue-500' : 'border border-gray-300'}`}>
-                  {isSelected && <Check className="h-3 w-3 text-white" />}
-                </div>
-                <span>Все платформы</span>
-              </div>
+              {/* <span className="mr-2 flex items-center">{item.icon}</span> */}
+              <span className="flex-1">{item.label}</span>
+              </>
             )}
           />
         </div>
