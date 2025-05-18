@@ -59,31 +59,18 @@ export default function Home() {
             width="100%"
             label="Платформы"
             customRenderSelectedItems={({ selectedItems, items, placeholder, label }) => {
-              // Создаем функции для работы с выбранными элементами
-              const getItemLabel = (value: string): string => {
-                const item = items.find(item => item.value === value);
-                return item?.label || value;
-              };
-              
-              const removeItem = (value: string): void => {
-                const newSelected = selectedItems.filter(v => v !== value);
-                handleChange(newSelected);
-              };
+              if (!selectedItems || selectedItems.length === 0) return placeholder;
               
               return (
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {selectedItems.map(value => (
-                    <div 
-                      key={value}
-                      className="flex items-center gap-1 bg-blue-100 text-blue-800 rounded-full px-2 py-1 text-xs"
-                    >
-                      <span>{getItemLabel(value)}</span>
-                      <X 
-                        className="h-3 w-3 cursor-pointer hover:text-blue-600" 
-                        onClick={() => removeItem(value)}
-                      />
-                    </div>
-                  ))}
+                <div className="flex items-center gap-1">
+                  {selectedItems.map(itemValue => {
+                    const item = items.find(i => i.value === itemValue);
+                    return (
+                      <div key={itemValue} className="px-3 h-7 flex items-center rounded-full bg-gray-100 text-gray-700 text-sm border border-gray-200">
+                        {item?.label || itemValue}
+                      </div>
+                    );
+                  })}
                 </div>
               );
             }}
