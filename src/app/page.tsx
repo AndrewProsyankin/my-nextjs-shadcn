@@ -4,6 +4,9 @@ import { MultiSelectDropdown } from "@/components/multi-select-dropdown";
 import { TRADING_PLATFORMS } from "@/data/trading-platforms";
 import { X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CountryCodeSelect } from "@/components/country-code-select";
+import { PhoneInput } from "@/components/phone-input";
+import { COUNTRY_CODES } from "@/data/country-codes";
 
 export default function Home() {
   // Обработчик изменения выбранных элементов
@@ -90,7 +93,7 @@ export default function Home() {
         </div>
         
         {/* Кастомный вариант без использования компонента */}
-        <div>
+        <div className="mb-8">
           <h2 className="text-lg font-semibold mb-2">Кастомный вариант</h2>
           <div className="bg-blue-50 border border-blue-200 rounded p-4">
             <div className="text-blue-800 font-medium mb-2">Трейдинговые платформы</div>
@@ -105,6 +108,33 @@ export default function Home() {
                   <span className="font-medium">{platform.label}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Выбор кода страны */}
+        <div className="mb-8">
+          <h2 className="text-lg font-semibold mb-2">Выбор кода страны</h2>
+          <div className="flex flex-col gap-4">
+            <div>
+              <h3 className="text-md font-medium mb-2">Отдельный компонент</h3>
+              <CountryCodeSelect 
+                countries={COUNTRY_CODES}
+                value="RU"
+                onChange={(code) => console.log(`Selected country code: ${code}`)}
+              />
+            </div>
+            
+            <div>
+              <h3 className="text-md font-medium mb-2">Ввод телефона с кодом страны</h3>
+              <PhoneInput 
+                countries={COUNTRY_CODES}
+                defaultCountry="RU"
+                onChange={(phoneNumber, countryCode) => 
+                  console.log(`Phone: ${phoneNumber}, Country: ${countryCode}`)
+                }
+                className="max-w-md"
+              />
             </div>
           </div>
         </div>
