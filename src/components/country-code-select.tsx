@@ -47,6 +47,12 @@ export function CountryCodeSelect({
     return countries.find((country) => country.code === selectedCode)
   }, [countries, selectedCode])
 
+  const filter = React.useCallback((value: string, search: string) => {
+    const item = countries.find(c => c.code === value)
+    const extendValue = `${item?.name} ${item?.dialCode} ${item?.code}`
+    return extendValue.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
+  }, [countries])
+
   // Handle selection change
   const handleSelect = React.useCallback((code: string) => {
     setSelectedCode(code)
@@ -84,7 +90,7 @@ export function CountryCodeSelect({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0 w-[220px]">
-          <Command value={selectedCode}>
+          <Command value={selectedCode} filter={filter}>
             <div className="border-b">
               <CommandInput
                 placeholder="Search country..."
