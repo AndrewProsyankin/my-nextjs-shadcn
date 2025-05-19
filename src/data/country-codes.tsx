@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface CountryCode {
   code: string;
   name: string;

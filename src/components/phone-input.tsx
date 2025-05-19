@@ -27,12 +27,6 @@ export function PhoneInput({
   const [selectedCountry, setSelectedCountry] = React.useState(defaultCountry)
   const [phoneNumber, setPhoneNumber] = React.useState(value)
 
-  // Get the dial code for the selected country
-  const dialCode = React.useMemo(() => {
-    const country = countries.find(c => c.code === selectedCountry)
-    return country?.dialCode || ""
-  }, [countries, selectedCountry])
-
   // Handle country code change
   const handleCountryChange = (code: string) => {
     setSelectedCountry(code)

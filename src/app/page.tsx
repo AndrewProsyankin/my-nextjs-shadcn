@@ -2,7 +2,6 @@
 
 import { MultiSelectDropdown } from "@/components/multi-select-dropdown";
 import { TRADING_PLATFORMS } from "@/data/trading-platforms";
-import { X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CountryCodeSelect } from "@/components/country-code-select";
 import { PhoneInput } from "@/components/phone-input";
@@ -63,7 +62,7 @@ export default function Home() {
             onChange={handleChange}
             width="100%"
             label="Платформы"
-            customRenderSelectedItems={({ selectedItems, items, placeholder, label }) => {
+            customRenderSelectedItems={({ selectedItems, items, placeholder }) => {
               if (!selectedItems || selectedItems.length === 0) return placeholder;
               
               return (
