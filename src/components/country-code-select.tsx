@@ -78,7 +78,7 @@ export function CountryCodeSelect({
           >
             {selectedCountry ? (
               <div className="flex items-center gap-2">
-                <span className="text-base">{selectedCountry.flag}</span>
+                <span className="text-sm">{selectedCountry.code}</span>
                 <span>{selectedCountry.dialCode}</span>
               </div>
             ) : (
@@ -110,7 +110,7 @@ export function CountryCodeSelect({
                     className="flex items-center py-2 px-3 cursor-pointer"
                   >
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-base">{country.flag}</span>
+                      <span className="text-sm">{country.code}</span>
                       <span>{country.name}</span>
                       <span className="text-gray-500 ml-auto">{country.dialCode}</span>
                     </div>
