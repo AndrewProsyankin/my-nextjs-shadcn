@@ -79,5 +79,49 @@ export const COUNTRY_CODES: CountryCode[] = [
     name: "Canada",
     dialCode: "+1",
     flag: "🇨🇦"
+  },
+  // Примеры для проверки улучшенного поиска с вариациями названий Saint/St
+  {
+    code: "LC",
+    name: "Saint Lucia",
+    dialCode: "+1758",
+    flag: "🇱🇨"
+  },
+  {
+    code: "VC",
+    name: "St. Vincent and the Grenadines",
+    dialCode: "+1784",
+    flag: "🇻🇨"
+  },
+  {
+    code: "KN",
+    name: "St Kitts and Nevis",
+    dialCode: "+1869",
+    flag: "🇰🇳"
+  },
+  // Другие примеры для проверки поиска
+  {
+    code: "NZ",
+    name: "New Zealand",
+    dialCode: "+64",
+    flag: "🇳🇿"
+  },
+  {
+    code: "SA",
+    name: "Saudi Arabia",
+    dialCode: "+966",
+    flag: "🇸🇦"
+  },
+  {
+    code: "AE",
+    name: "United Arab Emirates",
+    dialCode: "+971",
+    flag: "🇦🇪"
+  },
+  {
+    code: "KR",
+    name: "South Korea",
+    dialCode: "+82",
+    flag: "🇰🇷"
   }
 ];
