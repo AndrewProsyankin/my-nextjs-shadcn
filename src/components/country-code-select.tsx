@@ -91,7 +91,7 @@ export function CountryCodeSelect({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-[220px]">
+        <PopoverContent className="p-0 min-w-[220px] w-full" align="start" side="bottom">
           <Command value={selectedCode} filter={filter}>
             <div className="border-b">
               <CommandInput
