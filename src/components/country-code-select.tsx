@@ -25,6 +25,7 @@ export interface CountryCodeSelectProps {
   value?: string
   onChange?: (value: string) => void
   placeholder?: string
+  emptyMessage?: string
   disabled?: boolean
   className?: string
   buttonClassName?: string
@@ -35,6 +36,7 @@ export function CountryCodeSelect({
   value,
   onChange,
   placeholder = "Select country",
+  emptyMessage = "No country found.",
   disabled = false,
   className,
   buttonClassName,
@@ -98,7 +100,7 @@ export function CountryCodeSelect({
               />
             </div>
             <CommandList>
-              <CommandEmpty>No country found.</CommandEmpty>
+              <CommandEmpty>{emptyMessage}</CommandEmpty>
               <CommandGroup>
                 {countries.map((country) => (
                   <CommandItem
