@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CountryCodeSelect } from "@/components/country-code-select";
 import { PhoneInput } from "@/components/phone-input";
 import { COUNTRY_CODES } from "@/data/country-codes";
+import Link from "next/link";
 
 export default function Home() {
   // Обработчик изменения выбранных элементов
@@ -136,6 +137,30 @@ export default function Home() {
                 className="max-w-md"
               />
             </div>
+            
+            <div className="mt-4">
+              <Link 
+                href="/country-codes" 
+                className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              >
+                Посмотреть все примеры выбора кода страны
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Навигация */}
+      <div className="mt-8 w-full max-w-md">
+        <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border">
+          <h3 className="font-medium">Навигация по примерам</h3>
+          <div className="flex gap-2">
+            <Link 
+              href="/country-codes" 
+              className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+            >
+              Коды стран
+            </Link>
           </div>
         </div>
       </div>
