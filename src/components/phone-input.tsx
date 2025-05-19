@@ -53,7 +53,8 @@ export function PhoneInput({
         value={selectedCountry}
         onChange={handleCountryChange}
         disabled={disabled}
-        buttonClassName="rounded-r-none border-r-0"
+        className="w-[120px] min-w-[120px]"
+        buttonClassName="rounded-r-none border-r-0 w-full"
       />
       <Input
         type="tel"
